@@ -29,3 +29,8 @@ Route::get('service',[userservices::class,'service'])->name('service');
 Route::get('blogs',[userblogs::class,'blogs'])->name('blogs');
 Route::get('first',[userblogs::class,'firstblog'])->name('first');
 Route::get('second',[userblogs::class,'secondblog'])->name('second');
+Route::post('adduser',[usercontact::class,'adduser'])->name('adduser');
+Route::get('showdata',[usercontact::class,'showdata'])->name('showdata');
+Route::get('{id}/delete',[usercontact::class,'delete']);
+Route::get('{id}/edit',[usercontact::class,'edit']);
+Route::post('{id}/update',[usercontact::class,'update']);
