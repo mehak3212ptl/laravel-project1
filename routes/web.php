@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\usercontroller;
 use App\Http\Controllers\userabout;
 use App\Http\Controllers\usercontact;
+use App\Http\Controllers\usercontact2;
 use App\Http\Controllers\userservices;
 use App\Http\Controllers\userblogs;
 
@@ -34,3 +35,9 @@ Route::get('showdata',[usercontact::class,'showdata'])->name('showdata');
 Route::get('{id}/delete',[usercontact::class,'delete']);
 Route::get('{id}/edit',[usercontact::class,'edit']);
 Route::post('{id}/update',[usercontact::class,'update']);
+
+Route::get('contact2',[usercontact2::class,'contact2'])->name('contact2');
+Route::post('/add-product',[usercontact2::class,'addproduct'])->name('add.product');
+Route::post('addproducts',[usercontact2::class,'addproducts'])->name('addproducts');
+Route::get('showdata2',[usercontact2::class,'showdata2'])->name('showdata2');
+Route::delete('deleteproduct/{id}',[usercontact2::class,'deleteproduct']);
