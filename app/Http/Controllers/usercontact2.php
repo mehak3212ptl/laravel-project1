@@ -7,53 +7,63 @@ use App\Models\create_products_table;
 
 class usercontact2 extends Controller
 {
-    function contact2(){
-        return view('contact2');       
+     public function ajaxpage(){
+        return view('ajax');       
     }
-    public function addproduct(Request $request){
-        $request->validate(
-            [
-                'name'=>'required|unique:products',
-                'price'=>'required',
-            ],
-            [
-               'name.required'=>'Name is required',
-               'name.unique'=>'Product is already satisfied',
-               'price.requied'=>'price is required'
-            ]
-            );
-            $product=new create_products_table();
-            $product->name=$request->name;
-            $product->price=$request->price;
-            $product->save();
-            return response()->json([
-                'status'=>'success'
-            ]);
-    }
-    public function addproducts(Request $request){
-        
-        $request->validate([
-            'name'=>"required|max:255|string",
-            'price'=>"required|max:255|string",
+    // public function savedataajax(Request $request){
+    //   $tbl=new create_products_table;
+    //   parse_str($request->input('data'),$formData);
+    //   $tbl->name=$formData['name'];
+    //   $tbl->price=$formData['price'];
+    //   if(empty($formData['id'])||($formData['id']==""))
+    //   $tbl->save();
+    //   else{
+    //     $tbl=create_products_table::find($formdata['id']);
+    //     $tbl->name=$formData['name'];
+    //     $tbl->price=$formData['price'];
+    //     $tbl->update();
+    //   }
+    //   echo "changes made succesfully ";
 
-        ]) ;       
-        create_products_table::create([
-            'name'=>$request->name,
-            'price'=>$request->price,
-        ]);
-        
-        return redirect()->back()->with('status','Inserted');
-    }
-    public function showdata2(){
-        // dd("jhvjh");
-        $products=create_products_table::get();
-        // dd($products);
-        return view('contact2',["data"=>$products]);       
-    }
-    public function deleteproduct(int $id ){
+    // }
+    // public function getdataajax(){
+    //   return create_products_table::orderBy('id','desc')->get();
+    // }
+    // function editdataajax(Request $req){
+    //   return create_products_table::find($req->id);
+    // }
 
-        $del=create_products_table::findOrFail($id);
-        $del->delete();    
-        return response()->json(['status'=>true]) ;          
-     }
+    public function deletedata(Request $req){
+      create_products_table::where('id',$req->id)->delete(); 
+      echo "data delted succesfully";
+      
+    }
+   
+
+    public function savedataajax(Request $request){
+      $product=new create_products_table;
+      parse_str($request->input('data'),$formdata);
+      $product->name=$formdata['name'];
+      $product->price=$formdata['price'];
+      if(empty($formdata['id'])||($formdata['id']==""))
+      $product->save();
+      else{
+         $product=create_products_table::find($formdata['id']);
+         $product->name=$formdata['name'];
+         $product->price=$formdata['price'];
+         $product->update();
+      }
+      echo "changes made succesfully";
+   }
+
+
+   public function getdataajax(){
+      return create_products_table::orderBy('id','desc')->get();
+   }
+   
+
+   public function editdataajax(Request $req){
+      return create_products_table::find($req->id);   
+   }
 }
+

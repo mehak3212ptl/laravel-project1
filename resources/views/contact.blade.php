@@ -1,6 +1,6 @@
 @extends('layouts.master')
 @section('content')
-<a href="{{ route('showdata2') }}"> insert data through ajax </a> 
+
 <form  action="{{ route('adduser') }}" method="POST">
   @csrf
   <div class="alert alert-success  "> {{session('status')}}</div>

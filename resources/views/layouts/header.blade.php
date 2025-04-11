@@ -32,6 +32,9 @@
         <li class="nav-item">
           <a class="nav-link" href="{{ route('blogs') }}">Blogs</a>
         </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{{ route('ajaxpage') }}">Add</a>
+        </li>
         
       </ul>
       <form class="d-flex">
