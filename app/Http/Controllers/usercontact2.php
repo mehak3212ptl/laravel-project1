@@ -4,34 +4,14 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\create_products_table;
+use Intervention\Image\Facades\Image;
 
 class usercontact2 extends Controller
 {
      public function ajaxpage(){
         return view('ajax');       
     }
-    // public function savedataajax(Request $request){
-    //   $tbl=new create_products_table;
-    //   parse_str($request->input('data'),$formData);
-    //   $tbl->name=$formData['name'];
-    //   $tbl->price=$formData['price'];
-    //   if(empty($formData['id'])||($formData['id']==""))
-    //   $tbl->save();
-    //   else{
-    //     $tbl=create_products_table::find($formdata['id']);
-    //     $tbl->name=$formData['name'];
-    //     $tbl->price=$formData['price'];
-    //     $tbl->update();
-    //   }
-    //   echo "changes made succesfully ";
 
-    // }
-    // public function getdataajax(){
-    //   return create_products_table::orderBy('id','desc')->get();
-    // }
-    // function editdataajax(Request $req){
-    //   return create_products_table::find($req->id);
-    // }
 
     public function deletedata(Request $req){
       create_products_table::where('id',$req->id)->delete(); 
@@ -40,21 +20,55 @@ class usercontact2 extends Controller
     }
    
 
-    public function savedataajax(Request $request){
-      $product=new create_products_table;
-      parse_str($request->input('data'),$formdata);
-      $product->name=$formdata['name'];
-      $product->price=$formdata['price'];
-      if(empty($formdata['id'])||($formdata['id']==""))
-      $product->save();
+   //  public function savedataajax(Request $request){
+   //    $file = $request->file('image');
+   //    $filename = time().'-'.uniqid().'.'.$file->getClientOriginalExtension();
+   //    $file->move('asset',$filename);
+   //    $product=new create_products_table;
+   //    // parse_str($request->input('data'),$formdata);
+   //    $product->name=$request->name;
+   //    $product->price=$request->price;
+   //    $product->image=$request->$filename;   
+     
+   //    if(empty($request->id)||($request->id==""))
+   //    $product->save();
+   //    else{
+   //       $product=create_products_table::find($request->id);
+   //       $product->name=$request->name;
+   //       $product->price=$request->price;
+   //       $product->image=$request->$filename;
+   //       $product->update();
+   //    }
+   //    echo "changes made succesfully";
+   // } 
+   public function savedataajax(Request $request){
+      $image = $request->file('image');
+        $imageName = time().'-'.uniqid().'.'.$image->getClientOriginalExtension();
+        $image->move('asset',$imageName);
+
+        $tbl = new create_products_table;
+        $tbl->name=$request->name;
+        $tbl->price=$request->price;
+        $tbl->image=$imageName;
+
+        if(empty($formData['id'])||($formData['id']=="")){
+            $tbl->save();
+            return response()->json(['status' => 'success', 'message' => 'Product Added']);
+        }
       else{
-         $product=create_products_table::find($formdata['id']);
-         $product->name=$formdata['name'];
-         $product->price=$formdata['price'];
-         $product->update();
+        $tbl=create_products_table::find($formData['id']);
+        if (!$tbl) {
+            return response()->json(['status' => 'error', 'message' => 'Product not found'], 404);
+        }
+        $tbl->name=$request->name;
+        $tbl->price=$request->price;
+        $tbl->image=$imageName;
+        
+        $tbl->update();
+        return response()->json(['status' => 'success', 'message' => 'Product Updated']);
       }
-      echo "changes made succesfully";
    }
+
 
 
    public function getdataajax(){

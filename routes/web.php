@@ -37,7 +37,7 @@ Route::get('{id}/edit',[usercontact::class,'edit']);
 Route::post('{id}/update',[usercontact::class,'update']);
 Route::get('/ajaxpage',[usercontact2::class,'ajaxpage'])->name('ajaxpage');
 //ajax
-Route::post('savedataajax',[usercontact2::class,'savedataajax']);
+Route::post('savedataajax',[usercontact2::class,'savedataajax'])->name('savedataajax');
 Route::post('editdataajax',[usercontact2::class,'editdataajax']);
 Route::get('getdataajax',[usercontact2::class,'getdataajax']);
 Route::post('/deletedata',[usercontact2::class,'deletedata']);

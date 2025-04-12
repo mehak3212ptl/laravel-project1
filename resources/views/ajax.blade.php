@@ -63,7 +63,7 @@
 <!-- Form model -->
 
 <div class="modal fade" id="mymodel" tabindex="-1" aria-labelledby="addModalLabel" aria-hidden="true">
-<form  action="" method="POST" id="submitform">
+<form  action="" method="POST" id="submitform" enctype="multipart/form-data">
 @csrf
   <div class="modal-dialog">
     <div class="modal-content">
@@ -84,6 +84,10 @@
       <div class="mb-3">
         <label for="exampleInputPassword1" class="form-label">Price</label>
         <input type="text" name="price" class="form-control" id="price">
+      </div>
+      <div class="mb-3">
+        <label for="exampleInputPassword1" class="form-label">Upload your Image </label>
+        <input type="file" name="image" class="form-control" id="image">
       </div>
 
       <button type="submit" class="btn btn-primary ">Savedata</button>
@@ -109,44 +113,90 @@
 
     })
 
-    //SAVE with ajax
+    
+        function clear() {
+    $('#submitform  ')[0].reset();
+    $('#id').val('');
+    }
+
     $('#submitform').on('submit', function (e) {
     e.preventDefault();
-    var data = $(this).serialize();
+            let form_data = new FormData(this);
+            $.ajax({
+                url:"{{ route('savedataajax') }}",
+                method:'post',
+                data:form_data,
+                cache:false,
+                contentType: false,
+                processData: false,
+                success:function(response){
+                  $('#respanel').html(response);
+                  $('#submitform')[0].reset();
+                  $('#addmodel').modal('hide');
 
-    $.ajax({
-        url: 'savedataajax',
-        type: 'POST',
-        data: {
-            "_token": "{{ csrf_token() }}",
-            data: data
-        },
-        success: function(response) {
-            $('#respanel').html(response);
-            $('#submitform')[0].reset();
-            $('#mymodel').modal('hide');
-
-           
-            $('.modal-backdrop').remove();
-            $('body').removeClass('modal-open');
-            $('body').css('padding-right', '');
-
-            
-            Swal.fire({
-                title: 'Success!',
-                text: 'Product has been added successfully.',
-                icon: 'success',
-                timer: 2000,
-                showConfirmButton: false
-            });
-
-            fetchrecords();
-        },
-        error: function(xhr) {
+                
+                  $('.modal-backdrop').remove();
+                  $('body').removeClass('modal-open');
+                  $('body').css('padding-right', '');
+ 
+                    Swal.fire({
+                      title: 'Success!',
+                      text: 'Product has been added successfully.',
+                      icon: 'success',
+                      timer: 2000,
+                      showConfirmButton: false
+                });
+            },
+            error: function(xhr) {
             Swal.fire('Error!', 'Failed to save data.', 'error');
         }
+
+
     });
 });
+    //SAVE with ajax
+//     $('#submitform').on('submit', function (e) {
+//     e.preventDefault();
+//     let data = new FormData(this);
+
+//     $.ajax({
+//         url:"{{ route('savedataajax') }}",
+//         type: 'POST',
+//         data:data,
+//         cache:false,
+//         contentType: false,
+//         processData: false,
+
+//         // data: {
+//         //     "_token": "{{ csrf_token() }}",
+//         //     data: data
+//         // },
+//         success: function(response) {
+//             $('#respanel').html(response);
+//             $('#submitform')[0].reset();
+//             $('#mymodel').modal('hide');
+
+           
+//             $('.modal-backdrop').remove();
+//             $('body').removeClass('modal-open');
+//             $('body').css('padding-right', '');
+
+            
+//             Swal.fire({
+//                 title: 'Success!',
+//                 text: 'Product has been added successfully.',
+//                 icon: 'success',
+//                 timer: 2000,
+//                 showConfirmButton: false
+//             });
+
+//             fetchrecords();
+//         },
+//         error: function(xhr) {
+//             Swal.fire('Error!', 'Failed to save data.', 'error');
+//         }
+//     });
+// });
 //  EDIT with ajax 
      
       $(document).on('click','.btn-success',function(e){
